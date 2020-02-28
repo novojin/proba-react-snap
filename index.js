@@ -12,6 +12,8 @@ const minimalcss = require("minimalcss");
 const CleanCSS = require("clean-css");
 const twentyKb = 20 * 1024;
 
+let rrr = [];
+
 const defaultOptions = {
   //# stable configurations
   port: 45678,
@@ -198,15 +200,17 @@ const preloadResources = opt => {
     const responseUrl = response.url();
     const responseStatus = response.status();
 
+    rrr.push(responseUrl);
+
     // Throwing an error if status is 4.x.x or 5.x.x
     if (responseStatus >= 400) {
       throw new Error(`Error with ${ responseUrl } - status code ${ responseStatus } was returned`);
     }
 
-    // Throwing an error if sentry catches some issue with any page
-    if (responseUrl.indexOf('sentry.io') > -1) {
-      throw new Error('Some page has an issue - see log above');
-    }
+    // // Throwing an error if sentry catches some issue with any page
+    // if (responseUrl.indexOf('sentry.io') > -1) {
+    //   throw new Error('Some page has an issue - see log above');
+    // }
 
     if (/^data:|blob:/i.test(responseUrl)) return;
     const ct = response.headers()["content-type"] || "";
@@ -912,6 +916,7 @@ const run = async (userOptions, { fs } = { fs: nativeFs }) => {
     },
     onEnd: () => {
       if (server) server.close();
+      console.log('REQUESTS', rrr);
       if (http2PushManifest) {
         const manifest = Object.keys(http2PushManifestItems).reduce(
           (accumulator, key) => {
