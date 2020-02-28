@@ -196,43 +196,26 @@ const preloadResources = opt => {
   const onJsonFetchCallback = getCallbackFunctionFromFile(onJsonFetch, 'onJsonFetch');
   page.on("response", async response => {
     const responseUrl = response.url();
-
-    // Throwing an error if some request didn't pass
     const responseStatus = response.status();
 
-    if (responseUrl.indexOf('sentry.io') > -1) {
-      console.log('URL', responseUrl);
-      console.log('STATUS', responseStatus);
-    }
-
+    // Throwing an error if status is 4.x.x or 5.x.x
     if (responseStatus >= 400) {
       throw new Error(`Error with ${ responseUrl } - status code ${ responseStatus } was returned`);
+    }
+
+    // Throwing an error if sentry catches some issue with any page
+    if (responseUrl.indexOf('sentry.io') > -1) {
+      throw new Error('Some page has an issue - see log above');
     }
 
     if (/^data:|blob:/i.test(responseUrl)) return;
     const ct = response.headers()["content-type"] || "";
     const route = responseUrl.replace(basePath, "");
 
-    if (responseUrl.indexOf('sentry.io') > -1) {
-      console.log('ct', ct);
-      console.log('route', route);
-    }
-
     // pass json to the user callback
     // no matter which host it is coming from
     if (ct.includes("json") && onJsonFetchCallback) {
       const json = await response.json();
-
-      if (responseUrl.indexOf('sentry.io') > -1) {
-        console.log('json', json);
-      }
-
-      // const keys = Object.keys(json);
-      // const key = keys[0];
-      //
-      // if (keys.length === 1 && key === 'id') {
-      //   throw new Error(`Error with ${ responseUrl } - json wasn't fetched`);
-      // }
 
       onJsonFetchCallback(route, json);
     }
