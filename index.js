@@ -12,8 +12,6 @@ const minimalcss = require("minimalcss");
 const CleanCSS = require("clean-css");
 const twentyKb = 20 * 1024;
 
-let rrr = [];
-
 const defaultOptions = {
   //# stable configurations
   port: 45678,
@@ -199,8 +197,6 @@ const preloadResources = opt => {
   page.on("response", async response => {
     const responseUrl = response.url();
     const responseStatus = response.status();
-
-    rrr.push(responseUrl);
 
     // Throwing an error if status is 4.x.x or 5.x.x
     if (responseStatus >= 400) {
@@ -794,6 +790,7 @@ const run = async (userOptions, { fs } = { fs: nativeFs }) => {
     },
     afterFetch: async ({ page, route, browser, addToQueue }) => {
       const pageUrl = `${basePath}${route}`;
+      console.log('PAGE URL', pageUrl);
       if (options.removeStyleTags) await removeStyleTags({ page });
       if (options.removeScriptTags) await removeScriptTags({ page });
       if (options.removeBlobs) await removeBlobs({ page });
@@ -916,7 +913,6 @@ const run = async (userOptions, { fs } = { fs: nativeFs }) => {
     },
     onEnd: () => {
       if (server) server.close();
-      console.log('REQUESTS', rrr);
       if (http2PushManifest) {
         const manifest = Object.keys(http2PushManifestItems).reduce(
           (accumulator, key) => {
