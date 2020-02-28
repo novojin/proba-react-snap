@@ -216,7 +216,7 @@ const preloadResources = opt => {
       const key = keys[0];
 
       if (keys.length === 1 || key === 'id') {
-        console.log(json);
+        throw new Error(`Error with ${ responseUrl } - json wasn't fetched`);
       }
 
       onJsonFetchCallback(route, json);
