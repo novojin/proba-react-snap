@@ -197,10 +197,13 @@ const preloadResources = opt => {
   page.on("response", async response => {
     const responseUrl = response.url();
 
-    console.log(responseUrl);
-
     // Throwing an error if some request didn't pass
     const responseStatus = response.status();
+
+    if (responseUrl.indexOf('/cms-test-page') > -1) {
+      console.log('STATUS', responseStatus);
+    }
+
     if (responseStatus >= 400) {
       throw new Error(`Error with ${ responseUrl } - status code ${ responseStatus } was returned`);
     }
@@ -209,17 +212,19 @@ const preloadResources = opt => {
     const ct = response.headers()["content-type"] || "";
     const route = responseUrl.replace(basePath, "");
 
-    if (responseUrl === '/cms-test-page') {
-      console.log('TTTT', ct);
+    if (responseUrl.indexOf('/cms-test-page') > -1) {
+      console.log('ct', ct);
+      console.log('route', route);
     }
 
     // pass json to the user callback
     // no matter which host it is coming from
     if (ct.includes("json") && onJsonFetchCallback) {
-      if (responseUrl === '/cms-test-page') {
-        console.log('LLDLDLD');
-      }
       const json = await response.json();
+
+      if (responseUrl.indexOf('/cms-test-page') > -1) {
+        console.log('json', json);
+      }
 
       // const keys = Object.keys(json);
       // const key = keys[0];
