@@ -211,7 +211,14 @@ const preloadResources = opt => {
     // no matter which host it is coming from
     if (ct.includes("json") && onJsonFetchCallback) {
       const json = await response.json();
-      console.log('json', json);
+
+      const keys = Object.keys(json);
+      const key = keys[0];
+
+      if (keys.length === 1 || key === 'id') {
+        console.log(json);
+      }
+
       onJsonFetchCallback(route, json);
     }
 
