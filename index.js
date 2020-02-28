@@ -204,9 +204,9 @@ const preloadResources = opt => {
     }
 
     // Throwing an error if sentry catches some issue with any page
-    if (responseUrl.indexOf('sentry.io') > -1) {
-      throw new Error('Some page has an issue - see log above');
-    }
+    // if (responseUrl.indexOf('sentry.io') > -1) {
+    //   throw new Error('Some page has an issue - see log above');
+    // }
 
     if (/^data:|blob:/i.test(responseUrl)) return;
     const ct = response.headers()["content-type"] || "";
