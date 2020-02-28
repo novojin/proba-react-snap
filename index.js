@@ -219,12 +219,12 @@ const preloadResources = opt => {
       }
       const json = await response.json();
 
-      const keys = Object.keys(json);
-      const key = keys[0];
-
-      if (keys.length === 1 && key === 'id') {
-        throw new Error(`Error with ${ responseUrl } - json wasn't fetched`);
-      }
+      // const keys = Object.keys(json);
+      // const key = keys[0];
+      //
+      // if (keys.length === 1 && key === 'id') {
+      //   throw new Error(`Error with ${ responseUrl } - json wasn't fetched`);
+      // }
 
       onJsonFetchCallback(route, json);
     }
