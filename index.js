@@ -200,9 +200,7 @@ const preloadResources = opt => {
     // Throwing an error if some request didn't pass
     const responseStatus = response.status();
 
-    if (responseUrl.indexOf('/cms-test-page') > -1) {
-      console.log('STATUS', responseStatus);
-    }
+    console.log(responseUrl, responseStatus);
 
     if (responseStatus >= 400) {
       throw new Error(`Error with ${ responseUrl } - status code ${ responseStatus } was returned`);
@@ -221,10 +219,6 @@ const preloadResources = opt => {
     // no matter which host it is coming from
     if (ct.includes("json") && onJsonFetchCallback) {
       const json = await response.json();
-
-      if (responseUrl.indexOf('/cms-test-page') > -1) {
-        console.log('json', json);
-      }
 
       // const keys = Object.keys(json);
       // const key = keys[0];
