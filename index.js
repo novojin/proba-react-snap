@@ -203,10 +203,10 @@ const preloadResources = opt => {
       throw new Error(`Error with ${ responseUrl } - status code ${ responseStatus } was returned`);
     }
 
-    // // Throwing an error if sentry catches some issue with any page
-    // if (responseUrl.indexOf('sentry.io') > -1) {
-    //   throw new Error('Some page has an issue - see log above');
-    // }
+    // Throwing an error if sentry catches some issue with any page
+    if (responseUrl.indexOf('sentry.io') > -1) {
+      throw new Error('Some page has an issue - see log above');
+    }
 
     if (/^data:|blob:/i.test(responseUrl)) return;
     const ct = response.headers()["content-type"] || "";
@@ -790,10 +790,6 @@ const run = async (userOptions, { fs } = { fs: nativeFs }) => {
     },
     afterFetch: async ({ page, route, browser, addToQueue }) => {
       const pageUrl = `${basePath}${route}`;
-      if (pageUrl === 'http://localhost:45678/cms-test-page') {
-        console.log('options', options);
-        console.log('page', page);
-      }
       if (options.removeStyleTags) await removeStyleTags({ page });
       if (options.removeScriptTags) await removeScriptTags({ page });
       if (options.removeBlobs) await removeBlobs({ page });
