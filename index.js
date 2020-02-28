@@ -197,6 +197,8 @@ const preloadResources = opt => {
   page.on("response", async response => {
     const responseUrl = response.url();
 
+    console.log(responseUrl);
+
     // Throwing an error if some request didn't pass
     const responseStatus = response.status();
     if (responseStatus >= 400) {
