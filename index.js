@@ -207,15 +207,22 @@ const preloadResources = opt => {
     const ct = response.headers()["content-type"] || "";
     const route = responseUrl.replace(basePath, "");
 
+    if (responseUrl === '/cms-test-page') {
+      console.log('TTTT', ct);
+    }
+
     // pass json to the user callback
     // no matter which host it is coming from
     if (ct.includes("json") && onJsonFetchCallback) {
+      if (responseUrl === '/cms-test-page') {
+        console.log('LLDLDLD');
+      }
       const json = await response.json();
 
       const keys = Object.keys(json);
       const key = keys[0];
 
-      if (keys.length === 1 || key === 'id') {
+      if (keys.length === 1 && key === 'id') {
         throw new Error(`Error with ${ responseUrl } - json wasn't fetched`);
       }
 
